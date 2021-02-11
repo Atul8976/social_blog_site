@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-from blog import views
+from blog import views as bg
 from django.contrib.auth import views
 
 urlpatterns = [
@@ -23,4 +23,5 @@ urlpatterns = [
     path('',include('blog.urls')),
     path('accounts/login',views.LoginView.as_view(),name='login'),
     path('accounts/logout',views.LogoutView.as_view(),name='logout',kwargs={'next_page':'/'}),
+    path('register/',bg.register,name='register'),
 ]
