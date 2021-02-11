@@ -22,7 +22,7 @@
       <link rel="preconnect" href="https://fonts.gstatic.com">
       <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200&display=swap" rel="stylesheet">
       <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
-
+    
   </head>
   <body>
     <nav class="navbar navbar-default custom-navbar">
@@ -32,6 +32,11 @@
           <li><a class='' href="{%url 'about' %}">About</a></li>
           <li><a href="https://www.github.com">Github</a></li>
           <li><a href="https://www.linkedin.com">LinkedIn</a></li>
+          {%if not user.is_authenticated %}
+          <li>
+           <a class='' href="{%url 'register' %}">Register</a>
+          </li>
+          {%endif%}
         </ul>
 
         <ul class='nav navbar-nav techfont navbar-right'>

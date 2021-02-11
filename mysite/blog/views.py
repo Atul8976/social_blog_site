@@ -1,12 +1,14 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from django.views.generic import (TemplateView,ListView,DetailView,
 CreateView,UpdateView,DeleteView)
+# from django.views.generic.edit import FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from blog.models import Post,Comment
-from blog.forms import PostForm,CommentForm
+from blog.forms import PostForm,CommentForm,UserForm
 from django.utils import timezone
 from django.urls import reverse_lazy
+
 # Create your views here.
 
 class AboutView(TemplateView):
@@ -64,6 +66,43 @@ class DraftListView(LoginRequiredMixin,ListView):
     def get_queryset(self):
         return Post.objects.filter(published_date__isnull=True).order_by('created_date')
 
+
+def register(request):
+
+    registered = False
+
+    if request.method == "POST":
+        userform = UserForm(request.POST)
+        # profileform = UserProfileInfoForm(request.POST)
+
+        if userform.is_valid():
+
+            user = userform.save(commit=False)
+
+            username =  userform.cleaned_data.get('username')
+            raw_password1 = userform.cleaned_data.get('password1')
+            raw_password2 = userform.cleaned_data.get('password2')
+            email = userform.cleaned_data.get('email')
+
+            if raw_password1 == raw_password2:
+
+                user.set_password(userform.cleaned_data['password1'])
+                user.is_superuser = True
+                user.is_staff = True
+                user.save()
+                registered = True
+
+                return redirect('login')
+
+            else:
+                print(userform.errors)
+
+        else:
+            print(userform.errors)
+    else:
+        userform = UserForm()
+
+    return render(request,'blog/register.html',{'userform':userform,'registered':registered})
 
 
 ###############################################################
